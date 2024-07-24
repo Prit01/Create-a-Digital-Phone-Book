@@ -1,0 +1,147 @@
+# create by Priyanshu
+
+#Create a Digital Phone Book
+'''Statement 
+    Earlier, we use to have a phone book, which consists of contact numbers. Now that we know the power of python, let's create a digital phonebook. 
+    What does that mean? 
+    This means we have to create a menu-driven console application, where multiple users can create their account, 
+    We have to create an authentication system : 
+    1. Registration 
+    2. Login (If user is already registered) 
+    After successful authentication, user should have right to 
+    1. Add contacts 
+    2. Read all contacts 
+    3. Read any specific contact 
+    4. Update any specific contact 
+    5. Delete any specific contact
+    6. Delete all contacts'''
+
+
+users = {}
+
+
+phonebook = {}
+
+def register():
+    print("Please register a new account:")
+    username = input("Enter a username: ")
+    if username in users:
+        print("Username already exists. Please try again.")
+        return
+    
+    password = input("Enter a password: ")
+    users[username] = password
+    phonebook[username] = []
+    print("Registration successful!")
+
+def login():
+    print("Please log in to continue:")
+    username = input("Enter your username: ")
+    password = input("Enter your password: ")
+    
+    if username in users and users[username] == password:
+        print("Login successful!")
+        return username
+    else:
+        print("Invalid username or password.")
+        return None
+
+def add_contact(username):
+    print("Add a new contact:")
+    name = input("Enter contact name: ")
+    number = input("Enter contact number: ")
+    contact = {'name': name, 'number': number}
+    phonebook[username].append(contact)
+    print("Contact added successfully!")
+
+def read_all_contacts(username):
+    print("Your contacts:")
+    if phonebook[username]:
+        for index, contact in enumerate(phonebook[username], start=1):
+            print(f"{index}. Name: {contact['name']}, Number: {contact['number']}")
+    else:
+        print("No contacts found.")
+
+def read_contact(username):
+    name = input("Enter contact name to search: ")
+    found = False
+    for contact in phonebook[username]:
+        if contact['name'].lower() == name.lower():
+            print(f"Name: {contact['name']}, Number: {contact['number']}")
+            found = True
+            break
+    if not found:
+        print("Contact not found.")
+
+def update_contact(username):
+    name = input("Enter contact name to update: ")
+    for contact in phonebook[username]:
+        if contact['name'].lower() == name.lower():
+            new_number = input("Enter new number: ")
+            contact['number'] = new_number
+            print("Contact updated successfully!")
+            return
+    print("Contact not found.")
+
+def delete_contact(username):
+    name = input("Enter contact name to delete: ")
+    for index, contact in enumerate(phonebook[username]):
+        if contact['name'].lower() == name.lower():
+            del phonebook[username][index]
+            print("Contact deleted successfully!")
+            return
+    print("Contact not found.")
+
+def delete_all_contacts(username):
+    phonebook[username] = []
+    print("All contacts deleted successfully!")
+
+def main():
+    while True:
+        print("\nWelcome to Digital Phonebook")
+        print("1. Register")
+        print("2. Login")
+        print("3. Exit")
+        choice = input("Enter your choice: ")
+        
+        if choice == '1':
+            register()
+        elif choice == '2':
+            username = login()
+            if username:
+                while True:
+                    print("\nPhonebook Menu")
+                    print("1. Add Contact")
+                    print("2. Read All Contacts")
+                    print("3. Read Specific Contact")
+                    print("4. Update Specific Contact")
+                    print("5. Delete Specific Contact")
+                    print("6. Delete All Contacts")
+                    print("7. Logout")
+                    option = input("Enter your option: ")
+                    
+                    if option == '1':
+                        add_contact(username)
+                    elif option == '2':
+                        read_all_contacts(username)
+                    elif option == '3':
+                        read_contact(username)
+                    elif option == '4':
+                        update_contact(username)
+                    elif option == '5':
+                        delete_contact(username)
+                    elif option == '6':
+                        delete_all_contacts(username)
+                    elif option == '7':
+                        print(f"Goodbye, {username}!")
+                        break
+                    else:
+                        print("Invalid option! Please try again.")
+        elif choice == '3':
+            print("Exiting program.")
+            break
+        else:
+            print("Invalid choice! Please try again.")
+
+if __name__ == "__main__":
+    main()
